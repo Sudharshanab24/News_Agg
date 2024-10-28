@@ -19,6 +19,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black;
   z-index: 1000; 
 }
 
@@ -42,6 +43,7 @@ html, body {
   font-size: 18px; /* Increased font size */
   border-radius: 6px; /* More rounded corners */
   border: 1px solid #ccc; /* Subtle border */
+  color: black;
 }
 
 /* Buttons */
