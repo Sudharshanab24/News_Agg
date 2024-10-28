@@ -92,6 +92,7 @@ ul li ul {
     text-align: left;
     padding-top: 20px;
     box-shadow: 0px 3px 5px -1px var(--heading);
+    color: #000;
 }
 
 .down-arrow-icon {
