@@ -177,7 +177,7 @@ app.post('/save-article', async (req, res) => {
 });
 
 const fetchArticles = async () => {
-  const response = await fetch('http://localhost:3000/saved-articles', {
+  const response = await fetch('https://newsaggregator-cml2.onrender.com/saved-articles', {
     headers: { Authorization: `Bearer ${token}` },
   });
 
