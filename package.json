@@ -2,7 +2,7 @@
   "name": "news_agg",
   "version": "1.0.0",
   "description": "NEWS AGGREGATOR",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "concurrently \"npm run dev:frontend\" \"npm run start:backend\"",
     "build": "cd client && npx vite build",
