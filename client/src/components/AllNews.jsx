@@ -28,7 +28,7 @@ function AllNews() {
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    fetch(`https://server-29gdr6vcx-sudharshana-balusamys-projects.vercel.app/all-news`, {
+    fetch(`https://server-k4ew7rgg7-sudharshana-balusamys-projects.vercel.app/all-news?page=${page}&pageSize=${pageSize}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
