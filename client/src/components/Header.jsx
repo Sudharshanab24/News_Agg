@@ -103,7 +103,7 @@ function Header() {
         <ul className={active ? "nav-ul flex gap-5 md:gap-12 xs:gap-12 lg:basis-3/6 md:basis-4/6 md:justify-end active" : "nav-ul flex gap-10 lg:basis-3/6 md:basis-4/6 justify-end"}>
           <li>
             <Link className="no-underline font-semibold font-white" to="/" onClick={() => setActive(!active)}>
-              Home Hai
+              Home
             </Link>
           </li>
 
