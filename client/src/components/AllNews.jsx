@@ -22,19 +22,12 @@ function AllNews() {
     }
   }
 
-  const pageSize = 6;
-  const token = 'YOUR_AUTH_TOKEN'; // Replace this with your actual token
+  let pageSize = 6;
 
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    fetch(`https://localhost:3000/all-news?page=${page}&pageSize=${pageSize}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
+    fetch(`http://localhost:3000/all-news?page=${page}&pageSize=${pageSize}`)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -80,7 +73,7 @@ function AllNews() {
       {!isLoading && data.length > 0 && (
         <div className="pagination flex justify-center gap-14 my-10 items-center">
           <button disabled={page <= 1} className='pagination-btn text-center' onClick={handlePrev}>&larr; Prev</button>
-          <p className='font-semibold opacity-80'>{page} of 2</p>
+          <p className='font-semibold opacity-80'>{page} of 2</p> {/* Limit to 2 pages */}
           <button className='pagination-btn text-center' disabled={page >= 2} onClick={handleNext}>Next &rarr;</button>
         </div>
       )}
