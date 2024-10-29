@@ -27,7 +27,7 @@ function AllNews() {
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    fetch(`${process.env.BACKEND_URL}all-news?page=${page}&pageSize=${pageSize}`)
+    fetch(`http://localhost:3000/all-news?page=${page}&pageSize=${pageSize}`)
       .then(response => {
         if (response.ok) {
           return response.json();
