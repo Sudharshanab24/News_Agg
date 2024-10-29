@@ -177,7 +177,7 @@ app.post('/save-article', async (req, res) => {
 });
 
 const fetchArticles = async () => {
-  const response = await fetch('http://localhost:3000/saved-articles', {
+  const response = await fetch(`http://localhost:${process.env.PORT}/saved-articles`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -193,7 +193,7 @@ const fetchArticles = async () => {
 
 
 
-const PORT=process.env.PORT || 3000;
+const PORT=process.env.PORT;
 
 app.listen(PORT,()=>{
     console.log(`Server is running at port ${PORT}`);
