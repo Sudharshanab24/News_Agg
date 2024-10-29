@@ -21,15 +21,20 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model('Article', articleSchema);
 
+app.options('*', cors());
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 app.use(
   cors({
     origin: 'https://newsaggr3.netlify.app', // Replace with your Netlify frontend URL
     optionsSuccessStatus: 200,
   })
 );
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
