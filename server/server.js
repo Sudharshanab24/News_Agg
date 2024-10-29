@@ -21,7 +21,13 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model('Article', articleSchema);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://newsaggr3.netlify.app', // Replace with your Netlify frontend URL
+    optionsSuccessStatus: 200,
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
