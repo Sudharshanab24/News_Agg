@@ -28,6 +28,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+
+
 // Preflight OPTIONS requests
 app.options('*', cors());
 
@@ -41,6 +43,12 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something went wrong!');
 });
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://newsaggr3.netlify.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 
 mongoose.connect(process.env.MONGODB_URI)
@@ -151,7 +159,7 @@ app.post('/register', async (req, res) => {
   
   
 
-app.get("/all-news",(req,res)=>{
+app.get("/all-news",cors(),(req,res)=>{
     let pageSize=parseInt(req.query.pagesize) || 10;
     let page=parseInt(req.query.page)||1;
     let url=`https://newsapi.org/v2/everything?q=news&page=${page}&pageSize=${pageSize}&apiKey=${API_KEY}`
