@@ -16,7 +16,7 @@ function SearchResults() {
       setError(null);
 
       try {
-        const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&page=${page}&pageSize=9&apiKey=ed5ff2570b684cc794663cdcae5a680c`);
+        const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&page=${page}&pageSize=9&apiKey=6d26f431cbb1415cbe1a2dec2554ccbf`);
         const data = await response.json();
         console.log("API Response:", data);
         setSearchResults(data.articles);
