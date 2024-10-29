@@ -21,16 +21,13 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model('Article', articleSchema);
 
-// CORS Middleware
 app.use(cors({
   origin: 'https://newsaggr3.netlify.app',
-  methods: 'GET,POST',
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-
-
-// Preflight OPTIONS requests
+// Ensure the following middleware is used after setting up CORS.
 app.options('*', cors());
 
 // Body-parsing Middleware
@@ -44,9 +41,9 @@ app.use((err, req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://newsaggr3.netlify.app");
-  res.header("Access-Control-Allow-Methods", "GET, POST");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);  // Respond OK to OPTIONS preflight without authentication
+  }
   next();
 });
 
