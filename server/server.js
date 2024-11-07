@@ -22,13 +22,10 @@ const articleSchema = new mongoose.Schema({
 const Article = mongoose.model('Article', articleSchema);
 
 app.use(cors({
-  origin: 'https://newsaggr3.netlify.app',
+  origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-
-// Ensure the following middleware is used after setting up CORS.
-app.options('*', cors());
 
 // Body-parsing Middleware
 app.use(express.json());
