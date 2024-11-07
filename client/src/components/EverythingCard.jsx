@@ -23,7 +23,7 @@ function Card(props) {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/save-article',
+        'https://server-2doaphmlq-sudharshana-balusamys-projects.vercel.app/save-article',
         articleData,
         {
           headers: {
