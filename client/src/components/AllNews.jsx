@@ -24,7 +24,7 @@ function AllNews() {
 
   let pageSize = 6;
 
-  apiKey='6d26f431cbb1415cbe1a2dec2554ccbf'
+  const apiKey='6d26f431cbb1415cbe1a2dec2554ccbf'
 
   useEffect(() => {
     setIsLoading(true);
