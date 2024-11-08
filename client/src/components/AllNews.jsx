@@ -24,10 +24,16 @@ function AllNews() {
 
   let pageSize = 6;
 
+  apiKey='6d26f431cbb1415cbe1a2dec2554ccbf'
+
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    fetch(`https://server-2doaphmlq-sudharshana-balusamys-projects.vercel.app/all-news?page=${page}&pageSize=${pageSize}`)
+    fetch(`https://server-2doaphmlq-sudharshana-balusamys-projects.vercel.app/all-news?page=${page}&pageSize=${pageSize}`,{
+      headers: {
+        'Authorization': `Bearer ${apiKey}`
+      }
+    })
       .then(response => {
         if (response.ok) {
           return response.json();
