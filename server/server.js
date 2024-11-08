@@ -32,6 +32,27 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+async function makeApiRequest(url) {
+  try {
+    const response = await axios.get(url);
+    return {
+      status: 200,
+      success: true,
+      message: "Successfully fetched the data",
+      data: response.data,
+    };
+  } catch (error) {
+    console.error("API request error:", error.response ? error.response.data : error.message);
+    return {
+      status: 500,
+      success: false,
+      message: "Failed to fetch data from the API",
+      error: error.response ? error.response.data : error.message,
+    };
+  }
+}
+
+
 // Error-handling Middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -154,23 +175,26 @@ app.post('/register', async (req, res) => {
   
   
 
-app.get("/all-news",cors(),(req,res)=>{
-    let pageSize=parseInt(req.query.pagesize) || 10;
-    let page=parseInt(req.query.page)||1;
-    let url=`https://newsapi.org/v2/everything?q=news&page=${page}&pageSize=${pageSize}&apiKey=${API_KEY}`
-    fetchNews(url,res);
-})
+app.get("/all-news", async (req, res) => {
+  const pageSize = parseInt(req.query.pageSize) || 80;
+  const page = parseInt(req.query.page) || 1;
+  const query = req.query.q || 'world';
 
-app.options("/top-headlines",cors());
+  const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&page=${page}&pageSize=${pageSize}&apiKey=${process.env.API_KEY}`;
+  const result = await makeApiRequest(url);
+  res.status(result.status).json(result);
+});
 
-app.get("/top-headlines",(req,res)=>{
-    let pageSize=parseInt(req.query.pagesize) || 20;
-    let page=parseInt(req.query.page)||1;
-    let category=req.query.category||"business";
 
-    let url=`https://newsapi.org/v2/top-headlines?category=${category}&language=en&page=${page}&pageSize=${pageSize}&apiKey=${API_KEY}`
-    fetchNews(url,res);
-})
+app.get("/top-headlines", async (req, res) => {
+  const pageSize = parseInt(req.query.pageSize) || 80;
+  const page = parseInt(req.query.page) || 1;
+  const category = req.query.category || "general";
+
+  const url = `https://newsapi.org/v2/top-headlines?category=${category}&language=en&page=${page}&pageSize=${pageSize}&apiKey=${process.env.API_KEY}`;
+  const result = await makeApiRequest(url);
+  res.status(result.status).json(result);
+});
 
 app.post('/save-article', async (req, res) => {
   const authHeader = req.headers['authorization'];
