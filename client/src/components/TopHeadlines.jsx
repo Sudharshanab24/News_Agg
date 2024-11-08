@@ -27,7 +27,7 @@ function TopHeadlines() {
     setIsLoading(true);
     setError(null);
     const categoryParam = params.category ? `&category=${params.category}` : "";
-    fetch(`https://server-2doaphmlq-sudharshana-balusamys-projects.vercel.app/top-headlines?language=en${categoryParam}&page=${page}&pageSize=${pageSize}`)
+    fetch(`/api/top-headlines?language=en${categoryParam}&page=${page}&pageSize=${pageSize}`)
       .then((response) => {
         if (response.ok) {
           return response.json();

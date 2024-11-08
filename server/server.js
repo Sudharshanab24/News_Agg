@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const express=require("express");
 const axios = require("axios");
 const cors = require("cors");
+const path=require("path");
 
 const app = express();
 
@@ -31,6 +32,8 @@ app.use(cors({
 // Body-parsing Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
 
 async function makeApiRequest(url) {
   try {
@@ -186,7 +189,7 @@ app.get("/all-news", async (req, res) => {
 });
 
 
-app.get("/top-headlines", async (req, res) => {
+app.get("api/top-headlines", async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 80;
   const page = parseInt(req.query.page) || 1;
   const category = req.query.category || "general";
@@ -234,6 +237,14 @@ const fetchArticles = async () => {
     alert('Failed to fetch articles');
   }
 };
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
 
 
 

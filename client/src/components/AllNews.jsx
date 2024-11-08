@@ -29,11 +29,8 @@ function AllNews() {
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    fetch(`https://server-2doaphmlq-sudharshana-balusamys-projects.vercel.app/all-news?page=${page}&pageSize=${pageSize}`,{
-      headers: {
-        'Authorization': `Bearer ${apiKey}`
-      }
-    })
+    fetch(`http://localhost:3000/all-news?page=${page}&pageSize=${pageSize}`
+)
       .then(response => {
         if (response.ok) {
           return response.json();
