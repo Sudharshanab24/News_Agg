@@ -225,7 +225,7 @@ app.post('/save-article', async (req, res) => {
 });
 
 const fetchArticles = async () => {
-  const response = await fetch(`http://localhost:${process.env.PORT}/saved-articles`, {
+  const response = await fetch(`http://16.170.202.31:${process.env.PORT}/saved-articles`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -239,10 +239,10 @@ const fetchArticles = async () => {
 };
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.use(express.static(path.join(__dirname, 'client/dist')));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
   });
 }
 
