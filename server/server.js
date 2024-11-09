@@ -189,7 +189,7 @@ app.get("/all-news", async (req, res) => {
 });
 
 
-app.get("api/top-headlines", async (req, res) => {
+app.get("/api/top-headlines", async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 80;
   const page = parseInt(req.query.page) || 1;
   const category = req.query.category || "general";

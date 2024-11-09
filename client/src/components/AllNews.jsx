@@ -29,7 +29,7 @@ function AllNews() {
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    fetch(`http://localhost:3000/all-news?page=${page}&pageSize=${pageSize}`
+    fetch(`http://16.170.202.31:3000/all-news?page=${page}&pageSize=${pageSize}`
 )
       .then(response => {
         if (response.ok) {
