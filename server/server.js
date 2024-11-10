@@ -225,7 +225,7 @@ app.post('/save-article', async (req, res) => {
 });
 
 const fetchArticles = async () => {
-  const response = await fetch(`http://16.170.202.31:${process.env.PORT}/saved-articles`, {
+  const response = await fetch(`https://server-1sfey3k5q-sudharshana-balusamys-projects.vercel.app/saved-articles`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

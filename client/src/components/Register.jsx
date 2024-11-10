@@ -22,7 +22,7 @@ function Register({ onClose }) {
 
     // Registration API call
     try {
-      const response = await fetch('http://16.170.202.31:3000/register', {
+      const response = await fetch('https://server-1sfey3k5q-sudharshana-balusamys-projects.vercel.app/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name }), // Include name in request

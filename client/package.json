@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy":"http://16.170.202.31:3000",
+  "proxy":"https://server-1sfey3k5q-sudharshana-balusamys-projects.vercel.app",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
