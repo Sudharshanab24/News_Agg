@@ -63,11 +63,9 @@ app.use((err, req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  // Set Content-Security-Policy header
   res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self' https://vercel.live; object-src 'none'; style-src 'self'; img-src 'self' data:;");
   next();
 });
-
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);  // Respond OK to OPTIONS preflight without authentication
