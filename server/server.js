@@ -6,7 +6,6 @@ const express=require("express");
 const axios = require("axios");
 const cors = require("cors");
 const path=require("path");
-const helmet = require('helmet');
 
 const app = express();
 
@@ -29,40 +28,12 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://vercel.live"],
-      styleSrc: ["'self'"],
-      imgSrc: ["'self'", "data:"],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      upgradeInsecureRequests: [],
-    },
-  },
-}));
 
+// Body-parsing Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something went wrong!');
-});
-
-app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self' https://vercel.live; object-src 'none'; style-src 'self'; img-src 'self' data:;");
-  next();
-});
-app.use((req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);  // Respond OK to OPTIONS preflight without authentication
-  }
-  next();
-});
 
 async function makeApiRequest(url) {
   try {
@@ -86,6 +57,17 @@ async function makeApiRequest(url) {
 
 
 // Error-handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);  // Respond OK to OPTIONS preflight without authentication
+  }
+  next();
+});
 
 
 mongoose.connect(process.env.MONGODB_URI)
@@ -243,7 +225,7 @@ app.post('/save-article', async (req, res) => {
 });
 
 const fetchArticles = async () => {
-  const response = await fetch(`https://server-1sfey3k5q-sudharshana-balusamys-projects.vercel.app/saved-articles`, {
+  const response = await fetch(`https://server-1sfey3k5q-sudharshana-balusamys-projects.vercel.app:${process.env.PORT}/saved-articles`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
