@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowDown, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Login from "./Login";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
 
 function Header() {
   const [active, setActive] = useState(false);
@@ -16,6 +18,7 @@ function Header() {
   const [selectedState, setSelectedState] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const [user, setUser] = useState(null);
+  const [showMap, setShowMap] = useState(false); // Added state for showing map
 
   const categoryRef = useRef(null);
   const stateRef = useRef(null);
@@ -23,13 +26,13 @@ function Header() {
 
   const apiKey = 'AIzaSyCP8DPLtL3Nhs-uKBGiAEmdD_cLAkkOVBA'; // Replace with your actual API key
 
-  const categories = ["business", "entertainment", "general", "health", "science", "sports", "technology", "politics"];
-  const states = [
-    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
-    "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya",
-    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim",
-    "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
+  const countries = [
+    { name: "India", lat: 20.5937, lon: 78.9629 },
+    { name: "USA", lat: 37.0902, lon: -95.7129 },
+    { name: "Canada", lat: 56.1304, lon: -106.3468 },
+    { name: "Australia", lat: -25.2744, lon: 133.7751 },
+    { name: "UK", lat: 51.5074, lon: -0.1278 },
+    // Add more countries and their lat, lon as needed
   ];
 
   const handleLogin = (userData, token) => {
@@ -46,36 +49,12 @@ function Header() {
     setActive(false);
   };
 
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        const parsedUserData = JSON.parse(userData);
-        setUser(parsedUserData);
-      } catch (error) {
-        console.error("Invalid JSON data:", error);
-        localStorage.removeItem('user');
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (categoryRef.current && !categoryRef.current.contains(event.target)) {
-        setShowCategoryDropdown(false);
-      }
-      if (stateRef.current && !stateRef.current.contains(event.target)) {
-        setShowStates(false);
-      }
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setShowProfileDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim() === "") return;
+    navigate(`/search/${encodeURIComponent(searchTerm)}`);
+    setSearchTerm('');
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -84,11 +63,10 @@ function Header() {
     navigate('/');
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim() === "") return;
-    navigate(`/search/${encodeURIComponent(searchTerm)}`);
-    setSearchTerm('');
+  const handleMapClick = (country) => {
+    // Handle click on country, navigate to news page for the country
+    navigate(`/country-news/${encodeURIComponent(country.name)}`);
+    setShowMap(false); // Close map after clicking
   };
 
   const isLoggedIn = user !== null;
@@ -107,36 +85,11 @@ function Header() {
             </Link>
           </li>
 
-          <li className="dropdown-li" ref={categoryRef}>
-            <div className="no-underline font-semibold flex items-center gap-2 cursor-pointer" onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}>
-              CategoryNews <FontAwesomeIcon className={showCategoryDropdown ? "down-arrow-icon down-arrow-icon-active" : "down-arrow-icon"} icon={faCircleArrowDown} />
+          {/* New Map Dropdown */}
+          <li>
+            <div className="no-underline font-semibold flex items-center gap-2 cursor-pointer" onClick={() => setShowMap(!showMap)}>
+              Map
             </div>
-
-            <ul className={showCategoryDropdown ? "dropdown p-2 show-dropdown" : "dropdown p-2"} style={{ display: showCategoryDropdown ? 'block' : 'none' }}>
-              {categories.map((element, index) => (
-                <li key={index} onClick={() => setShowCategoryDropdown(false)}>
-                  <Link to={`/top-headlines/${element}`} className="flex gap-3 capitalize" onClick={() => setActive(false)}>
-                    {element}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </li>
-
-          <li className="dropdown-li" ref={stateRef}>
-            <div className="no-underline font-semibold flex items-center gap-2 cursor-pointer" onClick={() => setShowStates(!showStates)}>
-              StateNews <FontAwesomeIcon className={showStates ? "down-arrow-icon down-arrow-icon-active" : "down-arrow-icon"} icon={faCircleArrowDown} />
-            </div>
-
-            <ul className={showStates ? "dropdown p-2 show-dropdown" : "dropdown p-2"}>
-              {states.map((state, index) => (
-                <li key={index} onClick={() => handleStateSelection(state)}>
-                  <Link to="#" className="flex gap-3 capitalize cursor-pointer">
-                    {state}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </li>
 
           <li>
@@ -155,10 +108,7 @@ function Header() {
           </li>
 
           <li className="dropdown-li" ref={profileRef}>
-            <div
-              className="no-underline font-semibold flex items-center gap-2 cursor-pointer"
-              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-            >
+            <div className="no-underline font-semibold flex items-center gap-2 cursor-pointer" onClick={() => setShowProfileDropdown(!showProfileDropdown)}>
               {isLoggedIn ? (
                 <>
                   Profile <FontAwesomeIcon icon={faCircleArrowDown} className={showProfileDropdown ? "down-arrow-icon-active" : "down-arrow-icon"} />
@@ -169,21 +119,16 @@ function Header() {
                 </button>
               )}
             </div>
-
             {showProfileDropdown && isLoggedIn && (
               <ul className="dropdown p-2 show-dropdown">
                 <li className="p-2">
                   <Link to="/profile" className="no-underline font-semibold">View Profile</Link>
                 </li>
                 <li className="p-2">
-                  <Link
-                    to="#"
-                    className="no-underline font-semibold"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleLogout();
-                    }}
-                  >
+                  <Link to="#" className="no-underline font-semibold" onClick={(e) => {
+                    e.preventDefault();
+                    handleLogout();
+                  }}>
                     Logout
                   </Link>
                 </li>
@@ -193,6 +138,21 @@ function Header() {
         </ul>
 
         {showLogin && <Login onClose={() => setShowLogin(false)} onLogin={handleLogin} />}
+
+        {showMap && (
+          <div style={{ width: "100%", height: "500px" }}>
+            <MapContainer center={[20.5937, 78.9629]} zoom={3} style={{ width: "100%", height: "100%" }}>
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              {countries.map((country, index) => (
+                <Marker key={index} position={[country.lat, country.lon]}>
+                  <Popup>
+                    <span onClick={() => handleMapClick(country)}>{country.name}</span>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
+        )}
 
         <div className={active ? "ham-burger z-index-100 ham-open" : "ham-burger z-index-100"} onClick={() => setActive(!active)}>
           <span className="lines line-1"></span>

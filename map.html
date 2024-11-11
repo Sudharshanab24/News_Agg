@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map and News API</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map { height: 500px; }
+        #news-container { margin-top: 20px; }
+        .news-item { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <h3>Click on the map to get the country name and display news:</h3>
+    <div id="map"></div>
+    <div id="news-container"></div> <!-- Container to display news -->
+
+    <script>
+        // Initialize the map and set view
+        var map = L.map('map').setView([51.505, -0.09], 2);  // Set initial position and zoom level
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add a marker to the center
+        var marker = L.marker([51.505, -0.09]).addTo(map)
+            .bindPopup('London, UK')
+            .openPopup();
+
+        // Handle map click event to get country name from coordinates
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lon = e.latlng.lng;
+
+            // Reverse geocoding API URL (Nominatim from OpenStreetMap)
+            var geocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+
+            // Fetch country name from Nominatim API
+            fetch(geocodeUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.address && data.address.country) {
+                        var countryName = data.address.country;
+                        alert('You clicked on: ' + countryName);  // Display country name
+                        
+                        // Call the News API with the country name as query
+                        fetchNews(countryName);
+                    } else {
+                        alert('No country data found');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching country data:', err);
+                });
+        });
+
+        // Function to fetch news based on the country name
+        function fetchNews(country) {
+            // Replace YOUR_API_KEY with your actual News API key
+            var apiKey = '6d26f431cbb1415cbe1a2dec2554ccbf';
+            var newsApiUrl = `https://newsapi.org/v2/everything?q=${country}&apiKey=${apiKey}`;
+
+            fetch(newsApiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Check if there are articles returned
+                    if (data && data.articles) {
+                        displayNews(data.articles);
+                    } else {
+                        alert('No news found for this country.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching news:', err);
+                    alert('Error fetching news.');
+                });
+        }
+
+        // Function to display news articles
+        function displayNews(articles) {
+            var newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '';  // Clear any previous news
+
+            // Loop through the articles and display them
+            articles.forEach(article => {
+                var newsItem = document.createElement('div');
+                newsItem.classList.add('news-item');
+                newsItem.innerHTML = `
+                    <h4><a href="${article.url}" target="_blank">${article.title}</a></h4>
+                    <p>${article.description || 'No description available.'}</p>
+                    <p><strong>Published at:</strong> ${new Date(article.publishedAt).toLocaleString()}</p>
+                `;
+                newsContainer.appendChild(newsItem);
+            });
+        }
+    </script>
+</body>
+</html>
