@@ -162,6 +162,29 @@ app.post('/register', async (req, res) => {
       res.status(500).json({ message: 'Internal server error.' });
     }
   });
+
+  app.get('/api/news', async (req, res) => {
+    const country = req.query.country;
+  
+    if (!country) {
+      return res.status(400).json({ message: 'Country is required' });
+    }
+  
+    try {
+      // Fetch news based on the country
+      const newsApiUrl = `https://newsapi.org/v2/everything?q=${country}&apiKey=${process.env.API_KEY}`;
+      const response = await axios.get(newsApiUrl);
+      
+      if (response.data.articles) {
+        res.json(response.data.articles);
+      } else {
+        res.status(404).json({ message: 'No news found for this country.' });
+      }
+    } catch (err) {
+      console.error('Error fetching news:', err);
+      res.status(500).json({ message: 'Error fetching news.' });
+    }
+  });
   
   app.get('/profile', async (req, res) => {
     const authHeader = req.headers['authorization'];
