@@ -17,7 +17,7 @@ function Profile() {
       }
 
       // Fetch user profile and articles
-      const response = await fetch('https://server-1sfey3k5q-sudharshana-balusamys-projects.vercel.app/profile', {
+      const response = await fetch('http://16.170.202.31:3000/profile', {
         headers: { Authorization: `Bearer ${token}` }, // Set the Bearer token
       });
 
