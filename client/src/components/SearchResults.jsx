@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import EverythingCard from './EverythingCard';
 import Loader from './Loader';
 
-const api='6d26f431cbb1415cbe1a2dec2554ccbf'
+const api = '6d26f431cbb1415cbe1a2dec2554ccbf';
 
 function SearchResults() {
   const { query } = useParams();
@@ -18,8 +18,14 @@ function SearchResults() {
       setError(null);
 
       try {
-        const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&page=${page}&pageSize=9&apiKey=${api}`);
+        // Use a proxy server to bypass CORS error or move API calls to the backend
+        const response = await fetch(`http://localhost:5000/api/search?q=${query}&page=${page}&pageSize=9`); // Backend proxy URL
         const data = await response.json();
+
+        if (data.status !== 'ok') {
+          throw new Error(data.message || 'Error fetching search results');
+        }
+
         console.log("API Response:", data);
         setSearchResults(data.articles);
       } catch (error) {
@@ -56,6 +62,12 @@ function SearchResults() {
                 key={index}
               />
             ))}
+          </div>
+          <div className="pagination-controls">
+            <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1}>
+              Previous
+            </button>
+            <button onClick={() => setPage((prev) => prev + 1)}>Next</button>
           </div>
         </>
       )}

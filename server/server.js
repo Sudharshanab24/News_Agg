@@ -144,36 +144,48 @@ app.post('/register', async (req, res) => {
     
     res.send({ token, name: user.name });
   });
+
+  app.get('/api/search', async (req, res) => {
+    const { q, page, pageSize } = req.query;
+    
+    try {
+      const response = await fetch(`https://newsapi.org/v2/everything?q=${q}&page=${page}&pageSize=${pageSize}&apiKey=${apiKey}`);
+      const data = await response.json();
+  
+      if (data.status === 'ok') {
+        res.json(data); // Send the data back to the client
+      } else {
+        res.status(500).json({ message: 'Failed to fetch search results.' });
+      }
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      res.status(500).json({ message: 'Internal server error.' });
+    }
+  });
   
   app.get('/profile', async (req, res) => {
     const authHeader = req.headers['authorization'];
-    
-    // Ensure the token is in the "Bearer <token>" format
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).send('Access denied. No token provided.');
     }
   
-    const token = authHeader.split(' ')[1]; // Extract the token
-  
+    const token = authHeader.split(' ')[1];
     try {
       const verified = jwt.verify(token, 'your_jwt_secret');
-      
-      // Fetch user by email from the token payload
-      const user = await User.findOne({ email: verified.email });
-      
+      const user = await User.findById(verified.id);
+  
       if (!user) {
         return res.status(404).send('User not found');
       }
-
-      // Fetch saved articles for the user
+  
       const articles = await Article.find({ userId: user._id });
-
-      // Return user data (email, name) and their articles
       res.send({ email: user.email, name: user.name, articles });
     } catch (error) {
-      res.status(400).send('Invalid token');
+      console.error('Error fetching profile:', error);
+      res.status(400).send('Invalid token or server error');
     }
-});
+  });
+  
 
   
   
