@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import EverythingCard from './EverythingCard';
 import Loader from './Loader';
 
+const api='6d26f431cbb1415cbe1a2dec2554ccbf'
+
 function SearchResults() {
   const { query } = useParams();
   const [searchResults, setSearchResults] = useState([]);
@@ -16,7 +18,7 @@ function SearchResults() {
       setError(null);
 
       try {
-        const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&page=${page}&pageSize=9&apiKey=6d26f431cbb1415cbe1a2dec2554ccbf`);
+        const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&page=${page}&pageSize=9&apiKey=${api}`);
         const data = await response.json();
         console.log("API Response:", data);
         setSearchResults(data.articles);
