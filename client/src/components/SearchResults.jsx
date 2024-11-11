@@ -19,7 +19,7 @@ function SearchResults() {
 
       try {
         // Use a proxy server to bypass CORS error or move API calls to the backend
-        const response = await fetch(`http://localhost:5000/api/search?q=${query}&page=${page}&pageSize=9`); // Backend proxy URL
+        const response = await fetch(`http://16.170.202.31:3000/api/search?q=${query}&page=${page}&pageSize=9`); // Backend proxy URL
         const data = await response.json();
 
         if (data.status !== 'ok') {
