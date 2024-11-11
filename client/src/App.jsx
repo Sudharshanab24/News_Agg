@@ -9,6 +9,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Register from "./components/Register";
 import HomePage from "./components/HomePage";
 import Profile from "./components/Profile";
+import CountryNews from "./MapNewsComponent";
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Manage login state
@@ -31,6 +33,7 @@ function App() {
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/news/:countryName" element={<CountryNews />} />
           <Route path="/top-headlines/:category" element={<TopHeadlines />} />
           <Route path="/state-news/:stateName" element={<StateNews />} />
           <Route path="/search/:query" element={<SearchResults />} />

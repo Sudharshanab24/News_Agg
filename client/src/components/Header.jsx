@@ -65,7 +65,7 @@ function Header() {
 
   const handleMapClick = (country) => {
     // Handle click on country, navigate to news page for the country
-    navigate(`/country-news/${encodeURIComponent(country.name)}`);
+    navigate(`/news/${encodeURIComponent(country.name)}`);
     setShowMap(false); // Close map after clicking
   };
 
@@ -87,7 +87,7 @@ function Header() {
 
           {/* New Map Dropdown */}
           <li>
-            <div className="no-underline font-semibold flex items-center gap-2 cursor-pointer" onClick={() => setShowMap(!showMap)}>
+            <div className="no-underline font-semibold flex items-center gap-2 cursor-pointer font-white" onClick={() => setShowMap(!showMap)}>
               Map
             </div>
           </li>
