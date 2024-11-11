@@ -149,7 +149,7 @@ app.post('/register', async (req, res) => {
     const { q, page, pageSize } = req.query;
     
     try {
-      const response = await fetch(`https://newsapi.org/v2/everything?q=${q}&page=${page}&pageSize=${pageSize}&apiKey=${apiKey}`);
+      const response = await fetch(`https://newsapi.org/v2/everything?q=${q}&page=${page}&pageSize=${pageSize}&apiKey=${process.env.API_KEY}`);
       const data = await response.json();
   
       if (data.status === 'ok') {
