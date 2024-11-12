@@ -17,7 +17,7 @@ function Profile() {
       }
 
       // Fetch user profile and articles
-      const response = await fetch('http://16.171.159.39:3000/profile', {
+      const response = await fetch('http://localhost:3000/profile', {
         headers: { Authorization: `Bearer ${token}` }, // Set the Bearer token
       });
 

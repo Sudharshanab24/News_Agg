@@ -23,7 +23,7 @@ function Card(props) {
 
     try {
       const response = await axios.post(
-        'http://16.171.159.39:3000/save-article',
+        'http://localhost:3000/save-article',
         articleData,
         {
           headers: {

@@ -250,7 +250,7 @@ app.post('/save-article', async (req, res) => {
 });
 
 const fetchArticles = async () => {
-  const response = await fetch(`http://16.171.159.39:${process.env.PORT}/saved-articles`, {
+  const response = await fetch(`http://localhost:${process.env.PORT}/saved-articles`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

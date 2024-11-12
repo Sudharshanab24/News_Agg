@@ -8,8 +8,30 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
         #map { height: 500px; }
-        #news-container { margin-top: 20px; }
-        .news-item { margin-bottom: 15px; }
+        #news-container { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 20px; }
+        .news-card {
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        .news-card h4 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+        .news-card p {
+            font-size: 14px;
+            color: #555;
+        }
+        .news-card a {
+            text-decoration: none;
+            color: #333;
+        }
+        .news-card a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -80,21 +102,21 @@
                 });
         }
 
-        // Function to display news articles
+        // Function to display news articles in card format
         function displayNews(articles) {
             var newsContainer = document.getElementById('news-container');
             newsContainer.innerHTML = '';  // Clear any previous news
 
-            // Loop through the articles and display them
+            // Loop through the articles and display them in a card format
             articles.forEach(article => {
-                var newsItem = document.createElement('div');
-                newsItem.classList.add('news-item');
-                newsItem.innerHTML = `
+                var newsCard = document.createElement('div');
+                newsCard.classList.add('news-card');
+                newsCard.innerHTML = `
                     <h4><a href="${article.url}" target="_blank">${article.title}</a></h4>
                     <p>${article.description || 'No description available.'}</p>
                     <p><strong>Published at:</strong> ${new Date(article.publishedAt).toLocaleString()}</p>
                 `;
-                newsContainer.appendChild(newsItem);
+                newsContainer.appendChild(newsCard);
             });
         }
     </script>
