@@ -22,7 +22,7 @@ function Register({ onClose }) {
 
     // Registration API call
     try {
-      const response = await fetch('http://16.170.202.31:3000/register', {
+      const response = await fetch('http://16.171.159.39:3000/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name }), // Include name in request
