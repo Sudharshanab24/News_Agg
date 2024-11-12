@@ -13,15 +13,16 @@ function OpenPageButton() {
         position: 'fixed',
         bottom: '20px',
         right: '20px',
-        padding: '10px 20px',
-        backgroundColor: '#007bff',
+        padding: '5px 5px',
+        backgroundColor: '#1b05ae',
         color: '#fff',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
+        width:'50px',
       }}
     >
-      Google map
+      Map
     </button>
   );
 }
