@@ -5,7 +5,7 @@ import "./StateNews.css";
 function StateNews() {
   const { stateName } = useParams(); 
   const [videos, setVideos] = useState([]);
-  const apiKey = 'AIzaSyDBkJ4TEl6vsjjwlLC7XQEIMJP_1V8LLXM';
+  const apiKey = 'AIzaSyDlb6Yht6nC1Kf1jyvyteipL3FPOY5Bsp4';
 
   // Function to fetch videos by state
   const fetchVideosByState = (state) => {

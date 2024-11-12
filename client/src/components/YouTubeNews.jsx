@@ -8,7 +8,7 @@ const YouTubeNews = () => {
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState(null);
 
-  const apiKey = 'AIzaSyBaWPt0rQLKFq2Kude9OZGh4mqvGbWt4N0';
+  const apiKey = 'AIzaSyDlb6Yht6nC1Kf1jyvyteipL3FPOY5Bsp4';
   useEffect(() => {
     const fetchNewsVideos = async () => {
       const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=breaking+news&type=video&key=${apiKey}&maxResults=10`;
