@@ -163,28 +163,18 @@ app.post('/register', async (req, res) => {
     }
   });
 
-  app.get('/api/news', async (req, res) => {
-    const country = req.query.country;
-  
-    if (!country) {
-      return res.status(400).json({ message: 'Country is required' });
-    }
-  
+  app.get('/news', async (req, res) => {
+    const { country } = req.query;
+    const apiKey = 'YOUR_NEWS_API_KEY';  // Replace with your actual News API key
+
     try {
-      // Fetch news based on the country
-      const newsApiUrl = `https://newsapi.org/v2/everything?q=${country}&apiKey=${process.env.API_KEY}`;
-      const response = await axios.get(newsApiUrl);
-      
-      if (response.data.articles) {
-        res.json(response.data.articles);
-      } else {
-        res.status(404).json({ message: 'No news found for this country.' });
-      }
-    } catch (err) {
-      console.error('Error fetching news:', err);
-      res.status(500).json({ message: 'Error fetching news.' });
+        const response = await axios.get(`https://newsapi.org/v2/everything?q=${country}&apiKey=${process.env.API_KEY}`);
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error fetching news:', error);
+        res.status(500).json({ error: 'Failed to fetch news' });
     }
-  });
+});
   
   app.get('/profile', async (req, res) => {
     const authHeader = req.headers['authorization'];
