@@ -21,7 +21,7 @@ function OpenPageButton() {
         cursor: 'pointer',
       }}
     >
-      Open HTML Page
+      Google map
     </button>
   );
 }
